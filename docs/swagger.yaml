@@ -1,0 +1,112 @@
+definitions:
+  models.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  models.Profile:
+    properties:
+      birthdate:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+    required:
+    - birthdate
+    - email
+    - first_name
+    - last_name
+    type: object
+  models.SuccessResponse:
+    properties:
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /profile:
+    post:
+      consumes:
+      - application/json
+      description: Add a new user profile to the database
+      parameters:
+      - description: Profile data
+        in: body
+        name: profile
+        required: true
+        schema:
+          $ref: '#/definitions/models.Profile'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Profile'
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "409":
+          description: Profile already exists
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create a new profile
+      tags:
+      - profiles
+  /profile/{id}:
+    delete:
+      description: Remove a user profile by its ID
+      parameters:
+      - description: Profile ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Profile deleted
+          schema:
+            $ref: '#/definitions/models.SuccessResponse'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Profile not found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Delete a profile
+      tags:
+      - profiles
+    get:
+      description: Retrieve a user profile by its ID
+      parameters:
+      - description: Profile ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Profile'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Profile not found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get a profile
+      tags:
+      - profiles
+swagger: "2.0"
