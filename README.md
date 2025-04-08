@@ -35,7 +35,6 @@ Yeloo Clients is a Go-based RESTful API for managing user profiles. It provides 
    ```
 
 4. Access the API at `http://localhost:8080`.
-   Access the Swagger documentation at `http://localhost:8080/swagger/index.html`
 
 ## API Endpoints
 
