@@ -2,9 +2,8 @@ package database
 
 import (
 	"fmt"
-	"os"
-	"os/exec"
 	"yeloo-clients/config"
+	"yeloo-clients/internal/models"
 
 	gormPostgres "gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -15,9 +14,18 @@ import (
 // BuildDSN формирует строку подключения к базе данных
 func BuildDSN(cfg *config.Config) string {
 	return fmt.Sprintf(
-		"postgres://%s:%s@%s:%s/%s?sslmode=disable",
-		cfg.DBUser, cfg.DBPassword, cfg.DBHost, cfg.DBPort, cfg.DBName,
+		"postgres://%s:%s@%s:%s/%s?sslmode=%s",
+		cfg.DBUser, cfg.DBPassword, cfg.DBHost, cfg.DBPort, cfg.DBName, cfg.DBSSLMode,
 	)
+}
+
+func AutoMigrate(db *gorm.DB) {
+	// Выполняем AutoMigrate
+	err := db.AutoMigrate(&models.Profile{})
+	if err != nil {
+		log.Fatalf("Failed to migrate database: %v", err)
+	}
+	log.Println("AutoMigrate completed successfully")
 }
 
 func Connect(dsn string) (*gorm.DB, error) {
@@ -29,12 +37,9 @@ func Connect(dsn string) (*gorm.DB, error) {
 	}
 
 	log.Info("Database connected successfully")
-	return db, nil
-}
 
-func RunMigrations(dsn string) error {
-	cmd := exec.Command("atlas", "migrate", "apply", "--url", dsn)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
+	// Выполняем AutoMigrate
+	AutoMigrate(db)
+
+	return db, nil
 }

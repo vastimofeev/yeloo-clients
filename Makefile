@@ -1,28 +1,23 @@
-# Переменные
-APP_NAME = yeloo-clients
-DOCKER_COMPOSE = docker-compose
-GO = go
-SWAG = swag
-SERVER_PORT = 8080
+SHELL := /bin/bash
 
 # Команды
 .PHONY: all build run test docker-build docker-up docker-down swag-clean swag-init
 
 # Сборка бинарного файла
 build:
-	$(GO) build -o main cmd/server/main.go
+	go build -o main cmd/server/main.go
 
 # Запуск приложения локально
 run:
-	$(GO) run cmd/server/main.go
+	go run cmd/server/main.go
 
 # Запуск тестов
 test:
-	$(GO) test ./... -v
+	go test ./... -v
 
 # Генерация Swagger-документации
 swag-init:
-	$(SWAG) init -g cmd/server/main.go
+	swag init -g cmd/server/main.go
 
 # Очистка Swagger-документации
 swag-clean:
@@ -30,23 +25,29 @@ swag-clean:
 
 # Сборка Docker-образа
 docker-build:
-	$(DOCKER_COMPOSE) build
+	docker-compose build
 
 # Запуск Docker-контейнеров
 docker-up:
-	$(DOCKER_COMPOSE) up --build
+	docker-compose up --build
 
 # Остановка Docker-контейнеров
 docker-down:
-	$(DOCKER_COMPOSE) down
+	docker-compose down
 
 # Полная очистка Docker (включая тома)
 docker-clean:
-	$(DOCKER_COMPOSE) down -v
+	docker-compose down -v
 
 # Запуск приложения в Docker
 docker-run:
-	$(DOCKER_COMPOSE) up --build -d
+	docker-compose up --build -d
+	@echo "Ожидание состояния healthy для контейнера yeloo-clients-app-1..."
+	@while [ "$$(docker inspect -f '{{.State.Health.Status}}' yeloo-clients-app-1)" != "healthy" ]; do \
+		echo "Container yeloo-clients-app-1 not ready yet. Waiting..."; \
+		sleep 5; \
+	done
+	@echo "Container yeloo-clients-app-1 healthy!"
 
 # Помощь
 help:

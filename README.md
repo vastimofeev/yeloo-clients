@@ -8,7 +8,6 @@ Yeloo Clients is a Go-based RESTful API for managing user profiles. It provides 
 - **Validation**: Input validation for profile data.
 - **Swagger Documentation**: Auto-generated API documentation.
 - **Docker Support**: Dockerized application with PostgreSQL.
-- **Database Migrations**: Automated migrations using `golang-migrate`.
 
 ## Prerequisites
 
@@ -31,7 +30,7 @@ Yeloo Clients is a Go-based RESTful API for managing user profiles. It provides 
 
 3. Build and run the application using Docker Compose:
    ```bash
-   docker-compose up --build
+   make docker-run
    ```
 
 4. Access the API at `http://localhost:8080`.
@@ -79,7 +78,6 @@ Access the Swagger documentation at `http://localhost:8080/swagger/index.html`.
 │   ├── repositories/   # Database access logic
 │   ├── routes/         # API routes
 │   └── services/       # Business logic
-├── migrations/         # Database migration files
 ├── Dockerfile          # Docker build configuration
 ├── docker-compose.yml  # Docker Compose configuration
 ├── Makefile            # Common tasks
@@ -113,7 +111,3 @@ Access the Swagger documentation at `http://localhost:8080/swagger/index.html`.
    git push origin feature-name
    ```
 5. Open a pull request.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

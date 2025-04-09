@@ -47,7 +47,7 @@ func TestGetProfile(t *testing.T) {
 	mockProfile := &models.Profile{
 		ID:        1,
 		FirstName: "John",
-		LastName:  "Doe",
+		// LastName:  "Doe",
 		Birthdate: "1990-01-01",
 		Email:     "john.doe@example.com",
 	}
@@ -76,7 +76,7 @@ func TestCreateProfile(t *testing.T) {
 	mockProfile := &models.Profile{
 		ID:        1,
 		FirstName: "Jane",
-		LastName:  "Doe",
+		// LastName:  "Doe",
 		Birthdate: "1992-02-02",
 		Email:     "jane.doe@example.com",
 	}
